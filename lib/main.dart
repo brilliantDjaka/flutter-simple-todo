@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:simple_todo/component/new_todo.dart';
 import 'package:simple_todo/component/todo.dart';
+import 'package:simple_todo/helpers/command.dart';
 import 'package:simple_todo/schema/todo_schema.dart';
+
+import 'helpers/query.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,15 +35,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<TodoScema> todos = <TodoScema>[];
   @override
+  void initState() {
+    initTodo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.delete),
         tooltip: 'delete checked',
         onPressed: () {
-          setState(() {
-            deleteChecked();
-          });
+          deleteChecked();
         },
       ),
       appBar: AppBar(
@@ -66,9 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }),
             NewTodo(
               callback: (text) {
-                setState(() {
-                  addTodo(text);
-                });
+                addTodo(text);
               },
             )
           ],
@@ -81,17 +86,42 @@ class _MyHomePageState extends State<MyHomePage> {
     todos.removeAt(index);
   }
 
-  void addTodo(String text) {
+  void addTodo(String text) async {
     TodoScema todo = new TodoScema(checked: false, text: text);
-    todos.length == null ? todos = [todo] : todos.add(todo);
+    try {
+      var request = await insertTodoApi(todo);
+      print(request);
+      todo.id = request;
+    } catch (_) {
+      return;
+    }
+    setState(() {
+      todos.length == null ? todos = [todo] : todos.add(todo);
+    });
   }
+
   void pressTodo(int index) {
+    checkUncheck(todos[index]);
     todos[index].checked = !todos[index].checked;
   }
-  void deleteChecked() {
+
+  void deleteChecked() async{
     List todosClone = [...todos];
     for (var todo in todosClone) {
-      if(todo.checked) todos.remove(todo);
+      if (todo.checked) {
+        deleteCompleted(todo);
+        todos.remove(todo);
+      }
     }
+    setState(() {
+      
+    });
+  }
+
+  void initTodo() async {
+    List<TodoScema> res = await getAllTodo();
+    setState(() {
+      todos = res;
+    });
   }
 }

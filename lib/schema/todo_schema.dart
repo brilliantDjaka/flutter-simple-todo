@@ -1,5 +1,10 @@
 class TodoScema {
   String text;
   bool checked;
-  TodoScema({this.checked,this.text});
+  String author = "brian";
+  String id;
+  TodoScema({this.checked, this.text,this.id});
+  Map toMap() {
+    return {"text": text, "isChecked": checked, "author": "Brian"};
+  }
 }
