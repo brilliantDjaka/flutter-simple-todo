@@ -3,7 +3,7 @@ import 'package:simple_todo/component/new_todo.dart';
 import 'package:simple_todo/component/todo.dart';
 import 'package:simple_todo/helpers/command.dart';
 import 'package:simple_todo/schema/todo_schema.dart';
-import '../helpers/query.dart';
+import 'package:simple_todo/helpers/query.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
