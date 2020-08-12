@@ -13,14 +13,16 @@ class _TodoState extends State<Todo> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        top: 10,
-        bottom: 10
+        top: 0,
+        bottom: 0
       ),
       child: Row(
         children: <Widget>[
-          Checkbox(onChanged: (_){ 
+          Checkbox(
+            onChanged: (_){ 
             widget.oncheck();
-          }, value: widget.checked,),
+          },
+          value: widget.checked,),
           Text(widget.text)
         ],
       ),

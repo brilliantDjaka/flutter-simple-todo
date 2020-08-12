@@ -27,11 +27,8 @@ class _NewTodoState extends State<NewTodo> {
               decoration: InputDecoration.collapsed(hintText: 'add a todo'),
               cursorColor: Colors.black,
               onSubmitted: (text){
-                  
                   _textEditingController.clear();
                   widget.callback(text);
-                  
-                
               },
             ),
           ),
