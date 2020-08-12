@@ -17,7 +17,7 @@ Future<String> insertTodoApi(TodoScema todo) async {
   return id;
 }
 
-Future<bool> deleteCompleted(TodoScema todo) async {
+Future<void> deleteCompleted(TodoScema todo) async {
   var data = await http.delete(
     'https://trying-out-new-apps.herokuapp.com/todo/${todo.id}',
     headers: <String, String>{
@@ -25,12 +25,11 @@ Future<bool> deleteCompleted(TodoScema todo) async {
     },
   );
   if (data.statusCode != 200) {
-    return false;
+    throw Error();
   }
-  return true;
 }
 
-Future<bool> checkUncheck(TodoScema todo) async {
+Future<void> checkUncheck(TodoScema todo) async {
   var data = await http.post(
     'https://trying-out-new-apps.herokuapp.com/todo/check/${todo.id}',
     headers: <String, String>{
@@ -38,7 +37,6 @@ Future<bool> checkUncheck(TodoScema todo) async {
     },
   );
   if (data.statusCode != 200) {
-    return false;
+    throw Error();
   }
-  return true;
 }
