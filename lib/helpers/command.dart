@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:simple_todo/schema/todo_schema.dart';
+import 'package:simple_todo/states/todo.dart';
 
-Future<String> insertTodoApi(TodoScema todo) async {
+Future<String> insertTodoApi(TodoState todo) async {
   var data = await http.post(
     'https://trying-out-new-apps.herokuapp.com/todo',
     body: jsonEncode(todo.toMap()),
@@ -17,7 +17,7 @@ Future<String> insertTodoApi(TodoScema todo) async {
   return id;
 }
 
-Future<void> deleteCompleted(TodoScema todo) async {
+Future<void> deleteCompleted(TodoState todo) async {
   var data = await http.delete(
     'https://trying-out-new-apps.herokuapp.com/todo/${todo.id}',
     headers: <String, String>{
@@ -29,7 +29,7 @@ Future<void> deleteCompleted(TodoScema todo) async {
   }
 }
 
-Future<void> checkUncheck(TodoScema todo) async {
+Future<void> checkUncheck(TodoState todo) async {
   var data = await http.post(
     'https://trying-out-new-apps.herokuapp.com/todo/check/${todo.id}',
     headers: <String, String>{

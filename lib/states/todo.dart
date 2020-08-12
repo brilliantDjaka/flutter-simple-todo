@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:simple_todo/schema/todo_schema.dart';
 
 class TodoState with ChangeNotifier {
   String _text;
@@ -7,10 +6,10 @@ class TodoState with ChangeNotifier {
   String id;
   
   TodoState(this._text);
-  TodoState.fromScema(TodoScema schema){
-    _text = schema.text;
-    id = schema.id;
-    _isCheck = isCheck;
+  TodoState.fromMap(Map<String,dynamic> schema){
+    _text = schema["text"];
+    id = schema["_id"];
+    _isCheck = schema["isCheck"];
   }
 
   get text => _text;
@@ -20,11 +19,10 @@ class TodoState with ChangeNotifier {
     _isCheck = !_isCheck;
     notifyListeners();
   }
-  TodoScema toTodoSchema() => TodoScema(
-    checked: _isCheck,
-    text: _text,
-    id: id
-  );
+
+  Map toMap() {
+    return {"text": _text, "isChecked": _isCheck, "author": "Brian"};
+  }
 
 
 
