@@ -3,18 +3,19 @@ import 'package:flutter/widgets.dart';
 class TodoState with ChangeNotifier {
   String _text;
   bool _isCheck = false;
-  String id;
+  String _id;
   
-  TodoState(this._text);
+  TodoState(this._text,this._id);
   TodoState.fromMap(Map<String,dynamic> schema){
     _text = schema["text"];
-    id = schema["_id"];
+    _id = schema["_id"];
     _isCheck = schema["isCheck"];
   }
 
   get text => _text;
   get isCheck => _isCheck;
-  
+  get id => _id;
+
   void onCheck(){
     _isCheck = !_isCheck;
     notifyListeners();

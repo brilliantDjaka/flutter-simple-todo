@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_todo/pages/todo.dart';
-import 'package:provider/provider.dart';
-import 'package:simple_todo/states/todos.dart';
+import 'package:simple_todo/pages/init_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,13 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context)=>(AllTodoState()))
-        ],
-        child:Scaffold(body: TodoPages()),
-      ),
+      home: InitPage()
     );
   }
 }
-
