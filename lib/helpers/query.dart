@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:simple_todo/states/todo.dart';
 Future<List<TodoState>> getAllTodo(String email) async{
-   var data = await http.get('https://trying-out-new-apps.herokuapp.com/todo');
+   var data = await http.get('https://trying-out-new-apps.herokuapp.com/todo/$email');
    print(data.body);
    if(data.statusCode != 200) throw Error();
    var dataDecoded = json.decode(data.body);
