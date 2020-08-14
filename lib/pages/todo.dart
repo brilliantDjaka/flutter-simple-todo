@@ -22,11 +22,13 @@ class TodoPages extends StatelessWidget {
           onPressed: () async{
             snackbars.onProcess(context);
             try {
-              await allTodo.removeCompleted();
+              await command.deleteCompleted(auth.email);
               snackbars.success(context);
             } catch (e) {
               snackbars.error(context);
+              return;
             }
+            allTodo.removeCompleted();
           },
         ),
         body: Column(

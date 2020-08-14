@@ -23,9 +23,9 @@ Future<String> insertTodoApi(String text,String email) async {
   return id;
 }
 
-Future<void> deleteCompleted(TodoState todo) async {
+Future<void> deleteCompleted(String email) async {
   var data = await http.delete(
-    'https://trying-out-new-apps.herokuapp.com/todo/${todo.id}',
+    'https://trying-out-new-apps.herokuapp.com/todo/check/$email',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
