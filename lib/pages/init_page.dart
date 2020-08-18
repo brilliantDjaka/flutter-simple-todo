@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:simple_todo/helpers/query.dart' as query;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_todo/states/auth.dart';
+import 'package:simple_todo/states/loading.dart';
 import 'package:simple_todo/states/todos.dart';
 import 'package:simple_todo/pages/todo.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart' as spinner;
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: [
@@ -25,7 +27,9 @@ class _InitPageState extends State<InitPage> {
     return Scaffold(
       body: Center(
         child: isloading
-            ? Text('loading')
+            ? spinner.SpinKitPulse(
+                color: Colors.blue,
+              )
             : RaisedButton(
                 onPressed: () => signIn(context),
                 child: Text(
@@ -47,14 +51,14 @@ class _InitPageState extends State<InitPage> {
     }
     if (_googleSignIn.currentUser.email != null) {
       print(_googleSignIn.currentUser.email);
-      await initLoading(context,_googleSignIn.currentUser.email);
+      await initLoading(context, _googleSignIn.currentUser.email);
     }
     setState(() {
       isloading = false;
     });
   }
 
-  Future<void> initLoading(BuildContext context,String email) async {
+  Future<void> initLoading(BuildContext context, String email) async {
     var req = await query.getAllTodo(email);
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => MultiProvider(
@@ -62,7 +66,10 @@ class _InitPageState extends State<InitPage> {
           ChangeNotifierProvider<AllTodoState>(
               create: (context) => (AllTodoState.fromList(req))),
           ChangeNotifierProvider<AuthState>(
-            create: (context)=> (AuthState(email)),
+            create: (context) => (AuthState(email)),
+          ),
+          ChangeNotifierProvider<Loading>(
+            create: (context) => Loading(),
           )
         ],
         child: Scaffold(body: TodoPages()),

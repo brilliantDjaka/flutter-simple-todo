@@ -3,32 +3,51 @@ import 'package:provider/provider.dart';
 import 'package:simple_todo/component/new_todo.dart';
 import 'package:simple_todo/component/todo.dart';
 import 'package:simple_todo/states/auth.dart';
+import 'package:simple_todo/states/loading.dart';
 import 'package:simple_todo/states/todo.dart';
 import 'package:simple_todo/states/todos.dart';
 import 'package:simple_todo/helpers/command.dart' as command;
+import 'package:simple_todo/helpers/query.dart' as query;
 import 'package:simple_todo/component/snackbars.dart' as snackbars;
+import 'package:flutter_spinkit/flutter_spinkit.dart' as spinner;
+
+var timer;
 
 class TodoPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AllTodoState allTodo = Provider.of<AllTodoState>(context, listen: false);
     var auth = Provider.of<AuthState>(context);
+    var loading = Provider.of<Loading>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Todo Page'),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Todo Page'),
+              SizedBox(
+                width: 90,
+                child: Consumer<Loading>(
+                    builder: (context, loading, child) => loading.isLoading
+                        ? spinner.SpinKitPulse(color: Colors.white)
+                        : Container()),
+              )
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.delete),
-          onPressed: () async{
-            snackbars.onProcess(context);
+          onPressed: () async {
+            loading.initLoading();
+            allTodo.removeCompleted();
             try {
               await command.deleteCompleted(auth.email);
-              snackbars.success(context);
             } catch (e) {
               snackbars.error(context);
+              allTodo.setTodos = await query.getAllTodo(auth.email);
               return;
             }
-            allTodo.removeCompleted();
+            loading.completeLoading();
           },
         ),
         body: Column(
@@ -45,14 +64,17 @@ class TodoPages extends StatelessWidget {
                                 checked: todo.isCheck,
                                 text: todo.text,
                                 oncheck: () async {
-                                  snackbars.onProcess(context);
+                                  loading.initLoading();
+                                  todo.onCheck();
                                   try {
                                     await command.checkUncheck(todo.id);
-                                    todo.onCheck();
-                                    snackbars.success(context);
                                   } catch (err) {
+                                    print('error');
+                                    allTodo.setTodos =
+                                        await query.getAllTodo(auth.email);
                                     snackbars.error(context);
                                   }
+                                  loading.completeLoading();
                                 },
                               ),
                             ))),
@@ -60,14 +82,15 @@ class TodoPages extends StatelessWidget {
             ),
             NewTodo(
               callback: (text) async {
-                snackbars.onProcess(context);
+                loading.initLoading();
                 try {
                   var id = await command.insertTodoApi(text, auth.email);
                   allTodo.addTodo(text, id);
-                  snackbars.success(context);
                 } catch (err) {
+                  allTodo.setTodos = await query.getAllTodo(auth.email);
                   snackbars.error(context);
                 }
+                loading.completeLoading();
               },
             )
           ],

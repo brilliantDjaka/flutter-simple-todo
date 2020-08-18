@@ -8,12 +8,17 @@ class AllTodoState with ChangeNotifier {
     _todos = todos;
   }
   List<TodoState> get todos => _todos;
+  set setTodos(List<TodoState> todos) {
+    _todos = todos;
+    notifyListeners();
+  }
 
   void addTodo(String todo, String id) {
     _todos.add(TodoState(todo, id));
     notifyListeners();
   }
-  void removeCompleted(){
+
+  void removeCompleted() {
     _todos.removeWhere((element) => element.isCheck);
     notifyListeners();
   }
