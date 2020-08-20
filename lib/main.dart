@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Simple Todo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        accentColor: Color(0xff37d7b2),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: InitPage()

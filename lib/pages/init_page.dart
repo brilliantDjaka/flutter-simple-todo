@@ -28,7 +28,7 @@ class _InitPageState extends State<InitPage> {
       body: Center(
         child: isloading
             ? spinner.SpinKitPulse(
-                color: Colors.blue,
+                color: Color(0xff37d7b2),
               )
             : RaisedButton(
                 onPressed: () => signIn(context),

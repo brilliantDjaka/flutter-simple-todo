@@ -20,23 +20,36 @@ class TodoPages extends StatelessWidget {
     var auth = Provider.of<AuthState>(context);
     var loading = Provider.of<Loading>(context);
     return Scaffold(
+        backgroundColor: Colors.grey.shade200,
         appBar: AppBar(
+          backgroundColor: Colors.grey.shade200,
+          elevation: 0,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Todo Page'),
+              SizedBox(
+                width: 90,
+              ),
+              Text(
+                'Todo Page',
+                
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  
+                  color: Colors.grey.shade700),
+              ),
               SizedBox(
                 width: 90,
                 child: Consumer<Loading>(
                     builder: (context, loading, child) => loading.isLoading
-                        ? spinner.SpinKitPulse(color: Colors.white)
+                        ? spinner.SpinKitPulse(color: Color(0xff37d7b2))
                         : Container()),
               )
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.delete),
+          child: Icon(Icons.delete,color: Colors.white,),
           onPressed: () async {
             loading.initLoading();
             allTodo.removeCompleted();
